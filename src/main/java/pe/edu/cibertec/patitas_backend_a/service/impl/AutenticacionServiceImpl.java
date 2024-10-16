@@ -5,11 +5,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import pe.edu.cibertec.patitas_backend_a.dto.LoginRequestDTO;
+import pe.edu.cibertec.patitas_backend_a.dto.LogoutRequestDTO;
 import pe.edu.cibertec.patitas_backend_a.service.AutenticacionService;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.time.LocalDate;
 
 @Service
 public class AutenticacionServiceImpl implements AutenticacionService {
@@ -50,5 +50,20 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         }
 
         return datosUsuario;
+    }
+
+    @Override
+    public void registroLogout(LogoutRequestDTO logoutRequestDTO) throws IOException {
+
+        String path = "src/main/resources/sesionescerradas.txt";
+
+        try (BufferedWriter br = new BufferedWriter(new FileWriter(path, true))) {
+            br.write(logoutRequestDTO.tipoDocumento() + ";" + logoutRequestDTO.numeroDocumento() + ";" + LocalDate.now() + "\n");
+
+        } catch (IOException e) {
+            throw new IOException("Error al registrar en el txt 'sesionescerradas' ", e);
+
+        }
+
     }
 }
