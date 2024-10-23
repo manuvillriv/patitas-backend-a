@@ -1,5 +1,7 @@
 package pe.edu.cibertec.patitas_backend_a.service.impl;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -10,6 +12,8 @@ import pe.edu.cibertec.patitas_backend_a.service.AutenticacionService;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Service
 public class AutenticacionServiceImpl implements AutenticacionService {
@@ -29,9 +33,10 @@ public class AutenticacionServiceImpl implements AutenticacionService {
             while ((linea = br.readLine()) != null){
 
                 String[] datos = linea.split(";");
+
                 if (loginRequestDTO.tipoDocumento().equals(datos[0]) &&
-                    loginRequestDTO.numeroDocumento().equals(datos[1]) &&
-                    loginRequestDTO.password().equals(datos[2])) {
+                        loginRequestDTO.numeroDocumento().equals(datos[1]) &&
+                        loginRequestDTO.password().equals(datos[2])) {
 
                     datosUsuario = new String[2];
                     datosUsuario[0] = datos[3]; // Recuperar nombre
@@ -58,7 +63,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         String path = "src/main/resources/sesionescerradas.txt";
 
         try (BufferedWriter br = new BufferedWriter(new FileWriter(path, true))) {
-            br.write(logoutRequestDTO.tipoDocumento() + ";" + logoutRequestDTO.numeroDocumento() + ";" + LocalDate.now() + "\n");
+            br.write(logoutRequestDTO.tipoDocumento() + ";" + logoutRequestDTO.numeroDocumento() + ";" + LocalDate.now() + ";" + LocalTime.now() + "\n");
 
         } catch (IOException e) {
             throw new IOException("Error al registrar en el txt 'sesionescerradas' ", e);
@@ -66,4 +71,5 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         }
 
     }
+
 }
